@@ -6,33 +6,30 @@
 	const timer = setInterval(() => {
 		time = new Date();
 	}, 1000);
-	const getDegrees = (x, xPerR) => (360 / xPerR) * x - 90;
 
 	let time = new Date();
 
-	$: hoursDegrees = getDegrees(time.getHours() * 3600, 24 * 3600);
-	$: minuteDegrees = getDegrees(time.getMinutes() * 60, 3600);
-	$: secondDegrees = getDegrees(time.getSeconds(), 60);
+	$: h = time.getHours();
+	$: m = time.getMinutes();
+	$: s = time.getSeconds();
+
+	$: hoursDegrees = ((h % 12) + m / 60 + s / 3600) * 30 + 90;
+	$: minuteDegrees = m * 6 + s / 60 + 90;
+	$: secondDegrees = s * 6 + 90;
 
 	onDestroy(() => clearInterval(timer));
 </script>
 
 <div>{format(time, fmt)}</div>
-<div>{hoursDegrees}</div>
-<div>{minuteDegrees}</div>
-<div>{secondDegrees}</div>
 
 <div class="face">
-	<div class="second_hand" style={`transform: rotate(${secondDegrees}deg) translateX(100px)`}>
+	<div class="second_hand" style={`transform:  rotate(${secondDegrees}deg) translateX(-50%)`}>
 		&nbsp;
 	</div>
-	<div class="minute_hand" style={`transform: rotate(${minuteDegrees}deg) translateX(100px)`}>
+	<div class="minute_hand" style={`transform:  rotate(${minuteDegrees}deg) translateX(-50%)`}>
 		&nbsp;
 	</div>
-	<div
-		class="hour_hand"
-		style={`transform: rotate(${hoursDegrees}deg) translateX(50px) translateY(50px)`}
-	>
+	<div class="hour_hand" style={` transform: rotate(${hoursDegrees}deg) translateX(-50%)`}>
 		&nbsp;
 	</div>
 </div>
@@ -55,7 +52,7 @@
 	}
 	.hour_hand {
 		background-color: rgb(20, 94, 33);
-		width: 100px;
+		width: 200px;
 		height: 4px;
 	}
 </style>
