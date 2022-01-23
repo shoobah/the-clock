@@ -5,17 +5,18 @@
 	const fmt = 'yyyy-MM-dd HH:mm:ss zzzz';
 	const timer = setInterval(() => {
 		time = new Date();
-	}, 1000);
+	}, 10);
 
 	let time = new Date();
 
 	$: h = time.getHours();
 	$: m = time.getMinutes();
 	$: s = time.getSeconds();
+	$: ms = time.getMilliseconds();
 
 	$: hoursDegrees = ((h % 12) + m / 60 + s / 3600) * 30 + 90;
-	$: minuteDegrees = m * 6 + s / 60 + 90;
-	$: secondDegrees = s * 6 + 90;
+	$: minuteDegrees = (m + s / 60 + ms / 60000) * 6 + 90;
+	$: secondDegrees = (s + ms / 1000) * 6 + 90;
 
 	onDestroy(() => clearInterval(timer));
 </script>
